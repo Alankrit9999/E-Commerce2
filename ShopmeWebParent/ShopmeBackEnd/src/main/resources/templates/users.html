@@ -88,7 +88,10 @@
 			<tbody>
 				<tr th:each="user : ${listUsers}">
 					<td>[[${user.id}]]</td>
-					<td><span class="fa-solid fa-image-portrait fa-2xl icon-dark"></span></td>
+					<td>
+						<span th:if ="${user.photos == null}" class="fa-solid fa-image-portrait fa-2xl icon-dark"></span>
+						<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" />
+						</td>
 					<td>[[${user.email}]]</td>
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastName}]]</td>
@@ -110,6 +113,39 @@
 		
 	</table>
 </div>
+</div>
+
+<div class="text-center m-1" th:if ="${totalItems > 0}">
+	<span>Showing users # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+</div>
+<div class="text-center m-1" th:unless ="${totalItems > 0}">
+	<span>No Users found</span>
+</div>
+
+<div>
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li th:class="${currentPage > 1? 'page-item' : 'page-item disabled'}">
+                <a class="page-link" th:href="@{/users/page/1}">First</a>
+            </li>
+            <li th:class="${currentPage > 1? 'page-item' : 'page-item disabled'}">
+                <a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">Previous</a>
+            </li>
+ 
+            <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+            </li>
+ 
+            <li th:class="${currentPage < totalPages? 'page-item' : 'page-item disabled'}">
+                <a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1}}">Next</a>
+            </li>
+ 
+            <li th:class="${currentPage < totalPages? 'page-item' : 'page-item disabled'}">
+                <a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a>
+            </li>
+ 
+        </ul>
+    </nav>
 </div>
 		<div class="modal fade text-center" id="confirmModal">
 			<div class="modal-dialog">
